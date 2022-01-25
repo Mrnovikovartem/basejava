@@ -55,11 +55,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null) {
-                counter = i + 1;
-            }
-        }
         return counter;
     }
 }
