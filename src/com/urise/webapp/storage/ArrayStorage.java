@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[3];
     private int size;
 
     public void clear() {
@@ -22,7 +22,7 @@ public class ArrayStorage {
         } else if (size == storage.length) {
             System.out.println("Массив переполнен");
         } else {
-            for (int i = 0; i < size + 1; i++) {
+            for (int i = 0; i <= size; i++) {
                 if (storage[i] == null) {
                     storage[i] = r;
                     size++;
