@@ -32,11 +32,11 @@ public class ArrayStorage {
         }
     }
 
-    public void update (Resume r){
+    public void update(Resume r) {
         if (getArrayIndex(r.getUuid()) == -1) {
             System.out.println("Резюме не найдено");
         } else {
-                storage[getArrayIndex(r.getUuid())] = r;
+            storage[getArrayIndex(r.getUuid())] = r;
         }
     }
 
@@ -60,7 +60,6 @@ public class ArrayStorage {
         }
     }
 
-
     /**
      * @return array, contains only Resumes in storage (without null)
      */
@@ -80,6 +79,4 @@ public class ArrayStorage {
         }
         return -1;
     }
-
-
 }
