@@ -39,7 +39,7 @@ public abstract class AbstractArrayStorage implements Storage {
         } else if (size == STORAGE_LIMIT) {
             System.out.println("Массив переполнен");
         } else {
-            insertStorage(r, index);
+            saveToArray(r, index);
             size++;
         }
     }
@@ -58,21 +58,15 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index < 0) {
             System.out.println("Резюме " + uuid + " не найдено");
         } else if (uuid.equals(storage[index].getUuid())) {
-            deleteStorage(index);
+            deleteFromArray(index);
+            storage[size - 1] = null;
             size--;
         }
     }
 
     protected abstract int findIndex(String uuid);
 
-    protected abstract void insertStorage(Resume r, int index);
+    protected abstract void saveToArray(Resume r, int index);
 
-    protected abstract void deleteStorage(int index);
-
-//    @Override
-//    public String toString() {
-//        return "AbstractArrayStorage{" +
-//                "storage=" + Arrays.toString(storage) +
-//                '}';
-//    }
+    protected abstract void deleteFromArray(int index);
 }
