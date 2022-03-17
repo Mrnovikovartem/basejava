@@ -29,7 +29,7 @@ public class Resume implements Comparable<Resume> {
 
         Resume resume = (Resume) o;
 
-        if (uuid != null ? !uuid.equals(resume.uuid) : resume.uuid != null) return false;
+        if (!uuid.equals(resume.uuid)) return false;
 
         return true;
     }
