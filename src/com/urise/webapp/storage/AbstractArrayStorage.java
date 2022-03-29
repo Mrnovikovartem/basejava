@@ -1,13 +1,11 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
@@ -22,45 +20,31 @@ public abstract class AbstractArrayStorage implements Storage {
         size = 0;
     }
 
+    @Override
+    protected void doSave(Resume r, int index) {
+        if (size == STORAGE_LIMIT) {
+            throw new StorageException("Массив переполнен", r.getUuid());
+        }
+        addElement(r, index);
+        size++;
+    }
+
+    @Override
+    public void doUpdate(int index, Resume r) {
+        storage[index] = r;
+    }
+
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
 
-    public Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
+    @Override
+    protected Resume doGet(int index) {
         return storage[index];
     }
 
-    public void save(Resume r) {
-        int index = findIndex(r.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(r.getUuid());
-        }
-        if (size == STORAGE_LIMIT) {
-            throw new StorageException("Массив переполнен", r.getUuid());
-        }
-        saveToArray(r, index);
-        size++;
-    }
-
-
-    public void update(Resume r) {
-        int index = findIndex(r.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(r.getUuid());
-        }
-        storage[index] = r;
-
-    }
-
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
+    @Override
+    protected void doDelete(String uuid, int index) {
         if (uuid.equals(storage[index].getUuid())) {
             deleteFromArray(index);
             storage[size - 1] = null;
@@ -68,9 +52,8 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    protected abstract int findIndex(String uuid);
-
-    protected abstract void saveToArray(Resume r, int index);
+    protected abstract void addElement(Resume r, int index);
 
     protected abstract void deleteFromArray(int index);
+
 }
