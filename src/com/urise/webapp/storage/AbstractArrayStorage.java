@@ -21,17 +21,20 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(Resume r, int index) {
+    protected void doSave(Resume r, Object index) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Массив переполнен", r.getUuid());
         }
-        addElement(r, index);
+        if (index == null) {
+            index = -1;
+        }
+        addElement(r, (int) index);
         size++;
     }
 
     @Override
-    public void doUpdate(int index, Resume r) {
-        storage[index] = r;
+    public void doUpdate(Object index, Resume r) {
+        storage[(int) index] = r;
     }
 
     public Resume[] getAll() {
@@ -39,21 +42,23 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(int index) {
-        return storage[index];
+    protected Resume doGet(Object index) {
+        return storage[(int) index];
     }
 
     @Override
-    protected void doDelete(String uuid, int index) {
-        if (uuid.equals(storage[index].getUuid())) {
-            deleteFromArray(index);
-            storage[size - 1] = null;
-            size--;
-        }
+    protected void doDelete(String uuid, Object index) {
+        deleteFromArray((int) index);
+        storage[size - 1] = null;
+        size--;
+    }
+
+    @Override
+    protected boolean isExist(Object index) {
+        return (Integer) index >= 0;
     }
 
     protected abstract void addElement(Resume r, int index);
 
     protected abstract void deleteFromArray(int index);
-
 }

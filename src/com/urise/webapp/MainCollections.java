@@ -29,15 +29,15 @@ public class MainCollections {
 //               collection.remove(r);
 //            }
 //        }
-        Iterator<Resume> iterator = collection.iterator();
-        while (iterator.hasNext()) {
-            Resume r = iterator.next();
-            System.out.println(r);
-            if (Objects.equals(r.getUuid(), UUID_2)) {
-                iterator.remove();
-            }
-        }
-        System.out.println(collection.toString());
+//        Iterator<Resume> iterator = collection.iterator();
+//        while (iterator.hasNext()) {
+//            Resume r = iterator.next();
+//            System.out.println(r);
+//            if (Objects.equals(r.getUuid(), UUID_2)) {
+//                iterator.remove();
+//            }
+//        }
+//        System.out.println(collection.toString());
 
         Map<String, Resume> map = new HashMap<>();
         map.put(UUID_1, RESUME1);
@@ -45,13 +45,23 @@ public class MainCollections {
         map.put(UUID_3, RESUME3);
         map.put(UUID_4, RESUME4);
 
-        for (String uuid : map.keySet()) {
-            System.out.println(map.get(uuid));
-        }
+//        for (String uuid : map.keySet()) {
+//            System.out.println(map.get(uuid));
+//        }
+//
+//        for (Map.Entry<String,Resume> entry : map.entrySet()){
+//            System.out.println(entry.getValue());
+//        }
 
-        for (Map.Entry<String,Resume> entry : map.entrySet()){
-            System.out.println(entry.getValue());
-        }
+//        System.out.println((Resume[])map.values().toArray(new Resume[4]));
+//        System.out.println(map.toString());
+        System.out.println(map.get("фыв"));
+
+//        System.out.println(Arrays.toString(map.values()));
+
+
+        System.out.println(Arrays.toString(map.values().toArray(new Resume[4])));
+
 
 //        ListStorage list = new ListStorage();
 //
@@ -69,9 +79,8 @@ public class MainCollections {
 //        list.clear();
 //
 //        System.out.println(Arrays.toString(list.getAll()));
-//
-//        System.out.println(Arrays.toString(list.getAll()));
-//
 //        System.out.println(list.size());
+
+
     }
 }
