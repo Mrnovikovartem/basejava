@@ -7,46 +7,50 @@ import com.urise.webapp.model.Resume;
 public abstract class AbstractStorage implements Storage {
 
     public void save(Resume r) {
-        Object index = findIndex(r.getUuid());
-        if (isExist(index)) {
-            throw new ExistStorageException(r.getUuid());
-        }
-        doSave(r, index);
+        Object searchKey = isExistedSearchKey(r.getUuid());
+        doSave(r, searchKey);
     }
 
     public void update(Resume r) {
-        Object index = findIndex(r.getUuid());
-        if (!isExist(index)) {
-            throw new NotExistStorageException(r.getUuid());
-        }
-        doUpdate(index, r);
+        Object searchKey = isNotExistedSearchKey(r.getUuid());
+        doUpdate(searchKey, r);
     }
 
     public Resume get(String uuid) {
-        Object index = findIndex(uuid);
-        if (!isExist(index)) {
-            throw new NotExistStorageException(uuid);
-        }
-        return doGet(index);
+        Object searchKey = isNotExistedSearchKey(uuid);
+        return doGet(searchKey);
     }
 
     public void delete(String uuid) {
-        Object index = findIndex(uuid);
-        if (!isExist(index)) {
-            throw new NotExistStorageException(uuid);
-        }
-        doDelete(uuid, index);
+        Object searchKey = isNotExistedSearchKey(uuid);
+        doDelete(uuid, searchKey);
     }
 
-    protected abstract boolean isExist(Object index);
+    public Object isExistedSearchKey(String uuid) {
+        Object searchKey = findIndex(uuid);
+        if (isExist(searchKey)) {
+            throw new ExistStorageException(uuid);
+        }
+        return searchKey;
+    }
 
-    protected abstract void doUpdate(Object index, Resume r);
+    public Object isNotExistedSearchKey(String uuid) {
+        Object searchKey = findIndex(uuid);
+        if (!isExist(searchKey)) {
+            throw new NotExistStorageException(uuid);
+        }
+        return searchKey;
+    }
 
-    protected abstract Resume doGet(Object index);
+    protected abstract boolean isExist(Object searchKey);
 
-    protected abstract void doDelete(String uuid, Object index);
+    protected abstract void doUpdate(Object searchKey, Resume r);
 
-    protected abstract void doSave(Resume r, Object index);
+    protected abstract Resume doGet(Object searchKey);
+
+    protected abstract void doDelete(String uuid, Object searchKey);
+
+    protected abstract void doSave(Resume r, Object searchKey);
 
     protected abstract Object findIndex(String uuid);
 }

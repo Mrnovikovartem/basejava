@@ -25,9 +25,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Массив переполнен", r.getUuid());
         }
-        if (index == null) {
-            index = -1;
-        }
         addElement(r, (int) index);
         size++;
     }

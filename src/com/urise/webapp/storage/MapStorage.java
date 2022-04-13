@@ -10,33 +10,37 @@ public class MapStorage extends AbstractStorage {
     private Map<String, Resume> map = new LinkedHashMap<>();
 
     @Override
-    protected boolean isExist(Object index) {
-        return index != null;
+    protected boolean isExist(Object key) {
+        return key != null;
     }
 
     @Override
-    protected void doUpdate(Object index, Resume r) {
+    protected void doUpdate(Object key, Resume r) {
         map.replace(r.getUuid(), r, r);
     }
 
     @Override
     protected Resume doGet(Object uuid) {
-        return (Resume) uuid;
+        return (Resume) map.get(uuid);
     }
 
     @Override
-    protected void doDelete(String uuid, Object index) {
+    protected void doDelete(String uuid, Object key) {
         map.remove(uuid);
     }
 
     @Override
-    protected void doSave(Resume r, Object index) {
+    protected void doSave(Resume r, Object key) {
         map.put(r.getUuid(), r);
     }
 
     @Override
     protected Object findIndex(String uuid) {
-        return map.get(uuid);
+        if (map.get(uuid) == null) {
+            return null;
+        } else {
+            return map.get(uuid).getUuid();
+        }
     }
 
     @Override
@@ -46,7 +50,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return (Resume[]) map.values().toArray(new Resume[size()]);
+        return map.values().toArray(new Resume[size()]);
     }
 
     @Override

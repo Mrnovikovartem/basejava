@@ -39,7 +39,7 @@ public class MainCollections {
 //        }
 //        System.out.println(collection.toString());
 
-        Map<String, Resume> map = new HashMap<>();
+        Map<String, Resume> map = new LinkedHashMap<>();
         map.put(UUID_1, RESUME1);
         map.put(UUID_2, RESUME2);
         map.put(UUID_3, RESUME3);
@@ -55,7 +55,8 @@ public class MainCollections {
 
 //        System.out.println((Resume[])map.values().toArray(new Resume[4]));
 //        System.out.println(map.toString());
-        System.out.println(map.get("фыв"));
+        System.out.println(map.get("uuid1"));
+
 
 //        System.out.println(Arrays.toString(map.values()));
 
