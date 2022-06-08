@@ -4,43 +4,58 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
 
+    public static final Comparator<Resume> NAME_COMPARATOR = (o1, o2) -> o1.getFullName().compareTo(o2.getFullName());
+    public static final Comparator<Resume> UID_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
+
     public void save(Resume r) {
-        Object searchKey = isExistedSearchKey(r.getUuid());
+        Object searchKey = ExistedSearchKey(r.getUuid());
         doSave(r, searchKey);
     }
 
     public void update(Resume r) {
-        Object searchKey = isNotExistedSearchKey(r.getUuid());
+        Object searchKey = NotExistedSearchKey(r.getUuid());
         doUpdate(searchKey, r);
     }
 
     public Resume get(String uuid) {
-        Object searchKey = isNotExistedSearchKey(uuid);
+        Object searchKey = NotExistedSearchKey(uuid);
         return doGet(searchKey);
     }
 
     public void delete(String uuid) {
-        Object searchKey = isNotExistedSearchKey(uuid);
+        Object searchKey = NotExistedSearchKey(uuid);
         doDelete(uuid, searchKey);
     }
 
-    public Object isExistedSearchKey(String uuid) {
-        Object searchKey = findIndex(uuid);
+    private Object ExistedSearchKey(String uuid) {
+        Object searchKey = findKey(uuid);
         if (isExist(searchKey)) {
             throw new ExistStorageException(uuid);
         }
         return searchKey;
     }
 
-    public Object isNotExistedSearchKey(String uuid) {
-        Object searchKey = findIndex(uuid);
+    private Object NotExistedSearchKey(String uuid) {
+        Object searchKey = findKey(uuid);
         if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
         return searchKey;
     }
+
+    public List<Resume> getAllSorted() {
+        List<Resume> list = getAll();
+        Collections.sort(list, NAME_COMPARATOR.thenComparing(UID_COMPARATOR));
+        return list;
+    }
+
+    protected abstract List<Resume> getAll();
 
     protected abstract boolean isExist(Object searchKey);
 
@@ -52,7 +67,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void doSave(Resume r, Object searchKey);
 
-    protected abstract Object findIndex(String uuid);
+    protected abstract Object findKey(String uuid);
 }
 
 

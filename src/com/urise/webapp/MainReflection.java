@@ -10,9 +10,13 @@ public class MainReflection {
     public static void main(String[] args) throws IllegalAccessException, RuntimeException, NoSuchMethodException, InvocationTargetException {
         Resume r = new Resume();
         Field field = r.getClass().getDeclaredFields()[0];
+        Field field1 = r.getClass().getDeclaredFields()[1];
         field.setAccessible(true);
+        field1.setAccessible(true);
         System.out.println(field.getName());
+        System.out.println(field1.getName());
         System.out.println(field.get(r));
+        System.out.println(field1.get(r));
         field.set(r, "new_uuid");
         System.out.println(r);
 
