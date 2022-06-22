@@ -15,7 +15,6 @@ public class MainCollections {
     private static final Resume RESUME3 = new Resume(UUID_3,"Name3" );
     private static final Resume RESUME4 = new Resume(UUID_4,"Name4" );
 
-    private static final  Resume RESUME6 = new Resume();
 
 
     public static void main(String[] args) {

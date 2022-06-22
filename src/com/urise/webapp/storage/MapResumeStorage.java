@@ -26,8 +26,8 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doDelete(String uuid, Object resume) {
-        map.remove(uuid);
+    protected void doDelete(Object resume) {
+        map.remove(((Resume)resume).getUuid());
     }
 
     @Override
@@ -37,11 +37,7 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     protected Resume findKey(String uuid) {
-        if(map.containsKey(uuid)){
-            return  map.get(uuid);
-        } else {
-            return null;
-        }
+        return map.containsKey(uuid) ? map.get(uuid) : null;
     }
 
     @Override

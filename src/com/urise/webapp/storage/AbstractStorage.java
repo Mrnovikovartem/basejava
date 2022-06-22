@@ -4,36 +4,33 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.Resume;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+
 public abstract class AbstractStorage implements Storage {
 
-    public static final Comparator<Resume> NAME_COMPARATOR = (o1, o2) -> o1.getFullName().compareTo(o2.getFullName());
-    public static final Comparator<Resume> UID_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
-
     public void save(Resume r) {
-        Object searchKey = ExistedSearchKey(r.getUuid());
+        Object searchKey = getNotExistedSearchKey(r.getUuid());
         doSave(r, searchKey);
     }
 
     public void update(Resume r) {
-        Object searchKey = NotExistedSearchKey(r.getUuid());
+        Object searchKey = getExistedSearchKey(r.getUuid());
         doUpdate(searchKey, r);
     }
 
     public Resume get(String uuid) {
-        Object searchKey = NotExistedSearchKey(uuid);
+        Object searchKey = getExistedSearchKey(uuid);
         return doGet(searchKey);
     }
 
     public void delete(String uuid) {
-        Object searchKey = NotExistedSearchKey(uuid);
-        doDelete(uuid, searchKey);
+        Object searchKey = getExistedSearchKey(uuid);
+        doDelete(searchKey);
     }
 
-    private Object ExistedSearchKey(String uuid) {
+    private Object getNotExistedSearchKey(String uuid) {
         Object searchKey = findKey(uuid);
         if (isExist(searchKey)) {
             throw new ExistStorageException(uuid);
@@ -41,7 +38,7 @@ public abstract class AbstractStorage implements Storage {
         return searchKey;
     }
 
-    private Object NotExistedSearchKey(String uuid) {
+    private Object getExistedSearchKey(String uuid) {
         Object searchKey = findKey(uuid);
         if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
@@ -51,7 +48,7 @@ public abstract class AbstractStorage implements Storage {
 
     public List<Resume> getAllSorted() {
         List<Resume> list = getAll();
-        Collections.sort(list, NAME_COMPARATOR.thenComparing(UID_COMPARATOR));
+        list.sort(Comparator.comparing((Resume o1) -> o1.getFullName()).thenComparing(Resume::getUuid));
         return list;
     }
 
@@ -63,7 +60,7 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Resume doGet(Object searchKey);
 
-    protected abstract void doDelete(String uuid, Object searchKey);
+    protected abstract void doDelete(Object searchKey);
 
     protected abstract void doSave(Resume r, Object searchKey);
 
